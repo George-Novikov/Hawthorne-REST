@@ -16,7 +16,7 @@ public class FileService {
         return Repository.save(fileContainer);
     }
 
-    public FileContainer getFileMetadata(String id) throws Exception {
+    public FileContainer get(String id) throws Exception {
         return Repository.get(FileContainer.class, id);
     }
 
