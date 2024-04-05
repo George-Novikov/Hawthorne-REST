@@ -1,19 +1,25 @@
 package com.georgen.hawthornerest.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.georgen.hawthorne.api.annotations.EntityCollection;
+import com.georgen.hawthorne.api.annotations.Id;
+import com.georgen.hawthornerest.model.users.Role;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @EntityCollection
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Document {
+    @Id
     private Long id;
     private String title;
     private String text;
     private String authorID;
     private LocalDateTime modificationDate;
-    private List<String> attachedFileIDs;
-    private List<Role> ownerRoles;
+    private List<String> attachedFileIDs = new ArrayList<>();
+    private List<Role> ownerRoles = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -69,5 +75,13 @@ public class Document {
 
     public void setOwnerRoles(List<Role> ownerRoles) {
         this.ownerRoles = ownerRoles;
+    }
+
+    public boolean isValid(){
+        return isValid(this.title) && isValid(this.text) && isValid(authorID);
+    }
+
+    private boolean isValid(String value){
+        return value != null && !value.isEmpty();
     }
 }
