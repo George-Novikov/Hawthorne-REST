@@ -1,11 +1,15 @@
 package com.georgen.hawthornerest.model.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.georgen.hawthorne.api.annotations.EntityCollection;
 import com.georgen.hawthorne.api.annotations.Id;
-import com.georgen.hawthornerest.model.users.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 @EntityCollection
-public class User {
+public class User implements UserDetails {
     @Id
     private Integer id;
     private String login;
@@ -15,6 +19,7 @@ public class User {
     private String nickname;
     private String avatarFileID;
     private Role role;
+    private boolean isExpired;
     private boolean isBlocked;
 
     public Integer getId() {
@@ -81,6 +86,10 @@ public class User {
         this.role = role;
     }
 
+    public boolean isExpired() { return isExpired; }
+
+    public void setExpired(boolean expired) { isExpired = expired; }
+
     public boolean isBlocked() {
         return isBlocked;
     }
@@ -89,6 +98,43 @@ public class User {
         isBlocked = blocked;
     }
 
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.role.toGrantedAuthorities();
+    }
+
+    @JsonIgnore
+    @Override
+    public String getUsername() {
+        return this.login;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return !isBlocked();
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return !isBlocked();
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return !isExpired();
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isEnabled() {
+        return !isBlocked();
+    }
+
+    @JsonIgnore
     public boolean isNew(){
         return this.id == null;
     }

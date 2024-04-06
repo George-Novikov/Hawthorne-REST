@@ -1,5 +1,6 @@
 package com.georgen.hawthornerest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.georgen.hawthorne.api.annotations.EntityCollection;
 import com.georgen.hawthorne.api.annotations.Id;
@@ -77,6 +78,7 @@ public class Document {
         this.ownerRoles = ownerRoles;
     }
 
+    @JsonIgnore
     public boolean isValid(){
         return isValid(this.title) && isValid(this.text) && isValid(authorID);
     }
