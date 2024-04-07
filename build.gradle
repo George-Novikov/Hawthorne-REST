@@ -18,7 +18,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'com.george-n:hawthorne:1.0.0'
+    implementation 'com.george-n:hawthorne:1.0.1'
     implementation 'com.google.guava:guava:33.1.0-jre'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'

@@ -2,7 +2,7 @@ package com.georgen.hawthornerest.services;
 
 import com.georgen.hawthorne.api.Repository;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
-import com.georgen.hawthornerest.model.Document;
+import com.georgen.hawthornerest.model.documents.Document;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

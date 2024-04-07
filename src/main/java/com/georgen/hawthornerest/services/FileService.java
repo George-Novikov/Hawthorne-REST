@@ -2,7 +2,7 @@ package com.georgen.hawthornerest.services;
 
 import com.georgen.hawthorne.api.Repository;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
-import com.georgen.hawthornerest.model.FileContainer;
+import com.georgen.hawthornerest.model.files.FileContainer;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

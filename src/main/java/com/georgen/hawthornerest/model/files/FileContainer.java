@@ -1,4 +1,4 @@
-package com.georgen.hawthornerest.model;
+package com.georgen.hawthornerest.model.files;
 
 import com.georgen.hawthorne.api.annotations.BinaryData;
 import com.georgen.hawthorne.api.annotations.EntityCollection;

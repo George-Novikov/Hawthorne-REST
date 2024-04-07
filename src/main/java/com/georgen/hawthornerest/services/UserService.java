@@ -1,13 +1,12 @@
 package com.georgen.hawthornerest.services;
 
 import com.georgen.hawthorne.api.Repository;
-import com.georgen.hawthornerest.model.UserException;
+import com.georgen.hawthornerest.model.exceptions.UserException;
 import com.georgen.hawthornerest.model.users.User;
 import com.georgen.hawthornerest.model.users.UserIndex;
 import com.georgen.hawthornerest.tools.UserIndexComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,10 +18,6 @@ public class UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     private static final UserIndexComparator USER_INDEX_COMPARATOR = new UserIndexComparator();
     private List<UserIndex> userIndexes;
-
-    @Value("${admin-}")
-    private String adminLogin;
-    private String adminPassword;
 
     public User save(User user) throws Exception {
         ensureIndexesLoading();

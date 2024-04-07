@@ -1,6 +1,6 @@
 package com.georgen.hawthornerest.controllers;
 
-import com.georgen.hawthornerest.model.FileContainer;
+import com.georgen.hawthornerest.model.files.FileContainer;
 import com.georgen.hawthornerest.services.FileService;
 import com.georgen.hawthornerest.tools.Responder;
 import org.slf4j.Logger;

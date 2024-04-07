@@ -1,4 +1,4 @@
-package com.georgen.hawthornerest.model;
+package com.georgen.hawthornerest.model.documents;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

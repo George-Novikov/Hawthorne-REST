@@ -1,8 +1,9 @@
 package com.georgen.hawthornerest.model.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.georgen.hawthorne.api.annotations.EntityCollection;
 import com.georgen.hawthorne.api.annotations.Id;
-import com.georgen.hawthornerest.model.UserException;
+import com.georgen.hawthornerest.model.exceptions.UserException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,7 @@ public class UserIndex {
         this.index.put(user.getLogin(), user.getId());
     }
 
+    @JsonIgnore
     public boolean isOverwhelmed(){
         return index.size() >= 1000;
     }

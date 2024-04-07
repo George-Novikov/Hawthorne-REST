@@ -1,6 +1,6 @@
 package com.georgen.hawthornerest.controllers;
 
-import com.georgen.hawthornerest.model.Document;
+import com.georgen.hawthornerest.model.documents.Document;
 import com.georgen.hawthornerest.services.DocumentService;
 import com.georgen.hawthornerest.tools.Responder;
 import org.slf4j.Logger;
