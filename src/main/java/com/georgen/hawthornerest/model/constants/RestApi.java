@@ -20,7 +20,7 @@ public enum RestApi {
     }
     public static String getAuthPath(){
         String basePath = getGroupPath(AUTH);
-        return String.format("%s%s", basePath, "/**");
+        return String.format("%s%s", basePath, "/*");
     }
 
     public static String getGroupPath(RestApi group){

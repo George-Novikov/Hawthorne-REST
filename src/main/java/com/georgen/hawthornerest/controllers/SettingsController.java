@@ -6,10 +6,7 @@ import com.georgen.hawthornerest.tools.Responder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/settings")
@@ -23,7 +20,7 @@ public class SettingsController {
     }
 
     @PostMapping
-    public ResponseEntity save(Settings settings){
+    public ResponseEntity save(@RequestBody Settings settings){
         try {
             Settings savedSettings = service.save(settings);
             return Responder.sendOk(savedSettings);

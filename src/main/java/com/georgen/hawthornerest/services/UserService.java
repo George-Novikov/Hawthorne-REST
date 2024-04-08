@@ -68,7 +68,7 @@ public class UserService {
         return Repository.list(User.class, limit, offset);
     }
 
-    private boolean isLoginTaken(String login) throws Exception {
+    public boolean isLoginTaken(String login) throws Exception {
         return getByLogin(login) != null;
     }
 

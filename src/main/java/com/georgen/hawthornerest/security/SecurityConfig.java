@@ -9,9 +9,15 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.georgen.hawthornerest.model.constants.RestApi.*;
 
@@ -37,8 +43,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         boolean isAuthRequired = settingsService.get().isAuthRequired();
 
-        security.csrf(securityCustomizer -> securityCustomizer.disable());
-
         if (isAuthRequired){
             setAuthenticationPolicy(security);
         } else {
@@ -50,6 +54,13 @@ public class SecurityConfig {
                 );
         security.authenticationProvider(authenticationProvider);
         security.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+        security.csrf(AbstractHttpConfigurer::disable);
+        security.cors(
+                cors -> cors.configurationSource(
+                        getCorsConfiguration("*")
+                )
+        );
 
         return security.build();
     }
@@ -63,17 +74,11 @@ public class SecurityConfig {
                 requestsCustomizer -> {
                     requestsCustomizer
                             .requestMatchers(getAuthPath())
-                            .permitAll();
+                            .permitAll()
 
-                    requestsCustomizer
-                            .anyRequest()
-                            .authenticated();
-
-                    requestsCustomizer
                             .requestMatchers(getGroupPath(SETTINGS))
-                            .hasRole(Role.ADMIN.name());
+                            .hasRole(Role.ADMIN.name())
 
-                    requestsCustomizer
                             .requestMatchers(HttpMethod.GET, getReadingPathsArray(DOCUMENT))
                             .hasAuthority(Permission.DOCUMENT_READ.getSubject())
 
@@ -81,9 +86,8 @@ public class SecurityConfig {
                             .hasAuthority(Permission.DOCUMENT_WRITE.getSubject())
 
                             .requestMatchers(HttpMethod.DELETE, getGroupPath(DOCUMENT))
-                            .hasAuthority(Permission.DOCUMENT_WRITE.getSubject());
+                            .hasAuthority(Permission.DOCUMENT_WRITE.getSubject())
 
-                    requestsCustomizer
                             .requestMatchers(HttpMethod.GET, getReadingPathsArray(FILE))
                             .hasAuthority(Permission.FILE_READ.getSubject())
 
@@ -91,9 +95,8 @@ public class SecurityConfig {
                             .hasAuthority(Permission.FILE_WRITE.getSubject())
 
                             .requestMatchers(HttpMethod.DELETE, getGroupPath(FILE))
-                            .hasAuthority(Permission.FILE_WRITE.getSubject());
+                            .hasAuthority(Permission.FILE_WRITE.getSubject())
 
-                    requestsCustomizer
                             .requestMatchers(HttpMethod.GET, getReadingPathsArray(USER))
                             .hasAuthority(Permission.USER_READ.getSubject())
 
@@ -101,8 +104,23 @@ public class SecurityConfig {
                             .hasAuthority(Permission.USER_WRITE.getSubject())
 
                             .requestMatchers(HttpMethod.DELETE, getGroupPath(USER))
-                            .hasAuthority(Permission.USER_WRITE.getSubject());
+                            .hasAuthority(Permission.USER_WRITE.getSubject())
+
+                            .anyRequest()
+                            .authenticated();
                 }
         );
+    }
+
+    private UrlBasedCorsConfigurationSource getCorsConfiguration(String... origins){
+        final CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of(origins));
+        corsConfiguration.setAllowedMethods(List.of(origins));
+        corsConfiguration.setAllowedHeaders(List.of(origins));
+        corsConfiguration.setExposedHeaders(List.of(origins));
+
+        UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return corsConfigurationSource;
     }
 }

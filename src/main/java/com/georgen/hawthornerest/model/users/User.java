@@ -3,6 +3,7 @@ package com.georgen.hawthornerest.model.users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.georgen.hawthorne.api.annotations.EntityCollection;
 import com.georgen.hawthorne.api.annotations.Id;
+import com.georgen.hawthornerest.model.auth.RegistrationRequest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -21,6 +22,19 @@ public class User implements UserDetails {
     private Role role;
     private boolean isExpired;
     private boolean isBlocked;
+
+    public User() {}
+    public User(String login,
+                String password,
+                String firstname,
+                String lastname,
+                String nickname){
+        this.login = login;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.nickname = nickname;
+    }
 
     public Integer getId() {
         return id;
