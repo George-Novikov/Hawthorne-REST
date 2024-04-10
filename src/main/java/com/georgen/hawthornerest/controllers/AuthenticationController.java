@@ -4,9 +4,11 @@ import com.georgen.hawthornerest.model.auth.AuthResponse;
 import com.georgen.hawthornerest.model.auth.RegistrationRequest;
 import com.georgen.hawthornerest.services.AuthenticationService;
 import com.georgen.hawthornerest.tools.Responder;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,13 +34,14 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity authenticate(
+    @PostMapping("/login")
+    @Operation(summary = "Login", description = "Login", tags = {"auth"})
+    public ResponseEntity login(
             @RequestParam(value = "login", defaultValue = "") String login,
             @RequestParam(value = "password", defaultValue = "") String password
     ){
         try {
-            AuthResponse response = service.authenticate(login, password);
+            AuthResponse response = service.login(login, password);
             return Responder.sendOk(response);
         } catch (Exception e){
             LOGGER.error(e.getMessage(), e);

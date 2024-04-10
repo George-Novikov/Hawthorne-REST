@@ -1,6 +1,5 @@
 package com.georgen.hawthornerest.tools;
 
-import com.georgen.hawthorne.api.Repository;
 import com.georgen.hawthornerest.model.messages.SystemMessage;
 import com.georgen.hawthornerest.model.users.Role;
 import com.georgen.hawthornerest.model.users.User;
@@ -10,9 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class Bootstrap implements CommandLineRunner {
@@ -25,10 +23,12 @@ public class Bootstrap implements CommandLineRunner {
 
     private SettingsService settingsService;
     private UserService userService;
+    private PasswordEncoder passwordEncoder;
 
-    public Bootstrap(SettingsService settingsService, UserService userService) {
+    public Bootstrap(SettingsService settingsService, UserService userService, PasswordEncoder passwordEncoder) {
         this.settingsService = settingsService;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class Bootstrap implements CommandLineRunner {
         if (admin == null){
             admin = new User();
             admin.setLogin(adminLogin);
-            admin.setPassword(adminPassword);
+            admin.setPassword(passwordEncoder.encode(adminPassword));
             admin.setFirstname("Admin");
             admin.setLastname("Admin");
             admin.setNickname("Admin");

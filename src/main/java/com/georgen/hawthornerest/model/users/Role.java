@@ -39,9 +39,7 @@ public enum Role {
         return permissions;
     }
 
-    public GrantedAuthority getRoleAuthority() {
-        return roleAuthority;
-    }
+    public GrantedAuthority getRoleAuthority() { return roleAuthority; }
 
     public Set<GrantedAuthority> toGrantedAuthorities(){
         Set<GrantedAuthority> authorities = getPermissions()

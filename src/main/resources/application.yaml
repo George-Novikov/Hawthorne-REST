@@ -7,3 +7,6 @@ spring:
       max-request-size: 20MB
   config:
     import: application-security.yaml
+springdoc:
+  swagger-ui:
+    path: /openapi

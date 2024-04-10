@@ -16,10 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.georgen.hawthornerest.model.constants.RestApi.*;
+import static com.georgen.hawthornerest.model.constants.RestApiPath.*;
 
 @EnableWebSecurity
 @Configuration
@@ -73,7 +72,13 @@ public class SecurityConfig {
         security.authorizeHttpRequests(
                 requestsCustomizer -> {
                     requestsCustomizer
-                            .requestMatchers(getAuthPath())
+
+                            .requestMatchers(
+                                    getAuthPath(),
+                                    "/openapi",
+                                    "/swagger-ui/**",
+                                    "/v3/api-docs/**"
+                            )
                             .permitAll()
 
                             .requestMatchers(getGroupPath(SETTINGS))

@@ -4,7 +4,6 @@ import com.georgen.hawthornerest.model.auth.AuthResponse;
 import com.georgen.hawthornerest.model.auth.RegistrationRequest;
 import com.georgen.hawthornerest.model.exceptions.AuthException;
 import com.georgen.hawthornerest.model.exceptions.UserException;
-import com.georgen.hawthornerest.model.messages.AuthMessage;
 import com.georgen.hawthornerest.model.system.Settings;
 import com.georgen.hawthornerest.model.users.User;
 import com.georgen.hawthornerest.security.JwtHandler;
@@ -61,7 +60,7 @@ public class AuthenticationService {
         }
     }
 
-    public AuthResponse authenticate(String login, String password) throws Exception {
+    public AuthResponse login(String login, String password) throws Exception {
         if (login.isEmpty() || password.isEmpty()) throw new AuthException();
 
         authManager.authenticate(

@@ -3,10 +3,14 @@ package com.georgen.hawthornerest.controllers;
 import com.georgen.hawthornerest.model.system.Settings;
 import com.georgen.hawthornerest.services.SettingsService;
 import com.georgen.hawthornerest.tools.Responder;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/v1/settings")

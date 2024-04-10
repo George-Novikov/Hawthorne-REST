@@ -1,6 +1,6 @@
 package com.georgen.hawthornerest.model.constants;
 
-public enum RestApi {
+public enum RestApiPath {
     V1("/api/v1"),
 
     DOCUMENT("/document"),
@@ -11,7 +11,7 @@ public enum RestApi {
 
     private String path;
 
-    RestApi(String path) {
+    RestApiPath(String path) {
         this.path = path;
     }
 
@@ -23,11 +23,11 @@ public enum RestApi {
         return String.format("%s%s", basePath, "/*");
     }
 
-    public static String getGroupPath(RestApi group){
-        return String.format("%s%s",V1.getPath(), group.getPath());
+    public static String getGroupPath(RestApiPath group){
+        return String.format("%s%s", V1.getPath(), group.getPath());
     }
 
-    public static String[] getReadingPathsArray(RestApi group){
+    public static String[] getReadingPathsArray(RestApiPath group){
         String basePath = getGroupPath(group);
 
         String[] getPaths = new String[3];
