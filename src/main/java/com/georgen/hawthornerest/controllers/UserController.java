@@ -1,6 +1,8 @@
 package com.georgen.hawthornerest.controllers;
 
+import com.georgen.hawthornerest.controllers.openapi.OpenApi;
 import com.georgen.hawthornerest.model.users.User;
+import com.georgen.hawthornerest.model.users.UsersToActivate;
 import com.georgen.hawthornerest.services.UserService;
 import com.georgen.hawthornerest.tools.Responder;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,11 +31,11 @@ public class UserController {
     @PostMapping
     @Operation(
             summary = "Save user",
-            description = "Save user",
-            tags = {"user"},
+            description = OpenApi.USER_SAVE_DESCRIPTION,
+            tags = {OpenApi.USER_TAG},
             responses = @ApiResponse(
                     responseCode = "200",
-                    description = "Saves user",
+                    description = "Echoed user information with generated id",
                     content = @Content(schema = @Schema(implementation = User.class))
             )
     )
@@ -48,6 +50,16 @@ public class UserController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "Get user",
+            description = "Get user",
+            tags = {OpenApi.USER_TAG},
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "Complete user information",
+                    content = @Content(schema = @Schema(implementation = User.class))
+            )
+    )
     public ResponseEntity get(
             @RequestParam(value = "id", defaultValue = "0") int id,
             @RequestParam(value = "login", defaultValue = "") String login
@@ -63,6 +75,16 @@ public class UserController {
     }
 
     @DeleteMapping
+    @Operation(
+            summary = "Delete user",
+            description = "Get complete user information.",
+            tags = {OpenApi.USER_TAG},
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "true / false",
+                    content = @Content(schema = @Schema(implementation = Boolean.class))
+            )
+    )
     public ResponseEntity delete(@RequestParam(value = "id", defaultValue = "0") int id){
         if (id == 0) return Responder.sendBadRequest(NO_REQUIRED_PARAMS);
         try {
@@ -93,6 +115,16 @@ public class UserController {
         try {
             long count = service.count();
             return Responder.sendOk(count);
+        } catch (Exception e){
+            LOGGER.error(e.getMessage(), e);
+            return Responder.sendError(e);
+        }
+    }
+
+    @PostMapping("/activateList")
+    public ResponseEntity activateList(@RequestBody UsersToActivate activationList){
+        try {
+
         } catch (Exception e){
             LOGGER.error(e.getMessage(), e);
             return Responder.sendError(e);

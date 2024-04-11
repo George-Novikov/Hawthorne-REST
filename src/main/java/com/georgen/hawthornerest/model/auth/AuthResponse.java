@@ -16,6 +16,10 @@ public class AuthResponse {
         this.message = "Successful authentication. Welcome!";
         this.token = token;
     }
+    public AuthResponse(Describing describing, String token) {
+        this.message = describing.getDescription();
+        this.token = token;
+    }
 
     public String getMessage() {
         return message;

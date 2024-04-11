@@ -4,6 +4,7 @@ import com.georgen.hawthornerest.model.auth.AuthResponse;
 import com.georgen.hawthornerest.model.auth.RegistrationRequest;
 import com.georgen.hawthornerest.model.exceptions.AuthException;
 import com.georgen.hawthornerest.model.exceptions.UserException;
+import com.georgen.hawthornerest.model.messages.Describing;
 import com.georgen.hawthornerest.model.system.Settings;
 import com.georgen.hawthornerest.model.users.User;
 import com.georgen.hawthornerest.security.JwtHandler;
@@ -53,7 +54,9 @@ public class AuthenticationService {
         boolean isActivatedManually = settings.isManualUserActivation();
 
         if (isAuthRequired){
-            return new AuthResponse(isActivatedManually ? CONTACT_ADMIN_RESPONSE : ADDITIONAL_INFO_RESPONSE);
+            if (isActivatedManually) userService.addToActivationList(user);
+            Describing message = isActivatedManually ? CONTACT_ADMIN_RESPONSE : ADDITIONAL_INFO_RESPONSE;
+            return new AuthResponse(message);
         } else {
             String token = jwtHandler.generateToken(user);
             return new AuthResponse(token);
@@ -73,5 +76,19 @@ public class AuthenticationService {
 
         String token = jwtHandler.generateToken(user);
         return new AuthResponse(token);
+    }
+
+    public AuthResponse activate(Integer userID) throws Exception {
+        if (settingsService.get().isManualUserActivation()) return new AuthResponse(CONTACT_ADMIN_RESPONSE);
+
+        User user = userService.get(userID);
+        if (user == null) throw new UserException("User not found.");
+
+        user.setBlocked(false);
+        user.setExpired(false);
+        userService.save(user);
+
+        String token = jwtHandler.generateToken(user);
+        return new AuthResponse(ACTIVATION_SUCCESS, token);
     }
 }

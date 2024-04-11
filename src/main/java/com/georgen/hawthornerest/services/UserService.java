@@ -4,6 +4,7 @@ import com.georgen.hawthorne.api.Repository;
 import com.georgen.hawthornerest.model.exceptions.UserException;
 import com.georgen.hawthornerest.model.users.User;
 import com.georgen.hawthornerest.model.users.UserIndex;
+import com.georgen.hawthornerest.model.users.UsersToActivate;
 import com.georgen.hawthornerest.tools.UserIndexComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ public class UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     private static final UserIndexComparator USER_INDEX_COMPARATOR = new UserIndexComparator();
     private List<UserIndex> userIndexes;
+    private UsersToActivate activationList;
 
     public User save(User user) throws Exception {
         ensureIndexesLoading();
@@ -70,6 +72,25 @@ public class UserService {
 
     public boolean isLoginTaken(String login) throws Exception {
         return getByLogin(login) != null;
+    }
+
+    public void activateList(UsersToActivate activationList){
+
+    }
+
+    public UsersToActivate getActivationList() throws Exception {
+        if (this.activationList == null){
+            this.activationList = Repository.get(UsersToActivate.class);
+            if (this.activationList == null) this.activationList = new UsersToActivate();
+        }
+        return this.activationList;
+    }
+
+    public void addToActivationList(User user) throws Exception {
+        if (user == null || user.isNew() || !user.isBlocked()) return;
+        this.activationList = getActivationList();
+        this.activationList.add(user);
+        Repository.save(this.activationList);
     }
 
     private void addToIndex(User user) throws Exception {
