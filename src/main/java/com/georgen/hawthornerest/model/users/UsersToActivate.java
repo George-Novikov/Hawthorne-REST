@@ -7,14 +7,14 @@ import java.util.Set;
 
 @SingletonEntity
 public class UsersToActivate {
-    private Set<Integer> users = new HashSet<>();
+    private Set<Integer> userIDs = new HashSet<>();
 
-    public Set<Integer> getUsers() {
-        return users;
+    public Set<Integer> getUserIDs() {
+        return userIDs;
     }
 
-    public void setUsers(Set<Integer> users) {
-        this.users = users;
+    public void setUserIDs(Set<Integer> userIDs) {
+        this.userIDs = userIDs;
     }
 
     public void add(User user){
@@ -22,6 +22,14 @@ public class UsersToActivate {
     }
 
     public void add(Integer userID){
-        this.users.add(userID);
+        this.userIDs.add(userID);
+    }
+
+    public void remove(User user){
+        this.userIDs.remove(user.getId());
+    }
+
+    public void remove(Integer userID){
+        this.userIDs.remove(userID);
     }
 }

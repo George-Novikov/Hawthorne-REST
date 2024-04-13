@@ -2,7 +2,7 @@ package com.georgen.hawthornerest.services;
 
 import com.georgen.hawthorne.api.Repository;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
-import com.georgen.hawthornerest.model.system.Settings;
+import com.georgen.hawthornerest.model.settings.Settings;
 import org.springframework.stereotype.Service;
 
 @Service

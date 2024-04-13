@@ -1,5 +1,7 @@
 package com.georgen.hawthornerest.model.auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class RegistrationRequest {
     private String login;
     private String password;
@@ -47,6 +49,7 @@ public class RegistrationRequest {
         this.nickname = nickname;
     }
 
+    @JsonIgnore
     public boolean isEmpty(){
         return this.login == null || this.login.isEmpty()
                 || this.password == null || this.password.isEmpty()

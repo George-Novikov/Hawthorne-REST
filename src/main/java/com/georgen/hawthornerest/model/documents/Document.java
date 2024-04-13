@@ -8,6 +8,7 @@ import com.georgen.hawthornerest.model.users.Role;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @EntityCollection
@@ -17,8 +18,8 @@ public class Document {
     private Long id;
     private String title;
     private String text;
-    private String authorID;
-    private LocalDateTime modificationDate;
+    private Integer authorID;
+    private String modificationDate;
     private List<String> attachedFileIDs = new ArrayList<>();
     private List<Role> ownerRoles = new ArrayList<>();
 
@@ -46,19 +47,19 @@ public class Document {
         this.text = text;
     }
 
-    public String getAuthorID() {
+    public Integer getAuthorID() {
         return authorID;
     }
 
-    public void setAuthorID(String authorID) {
+    public void setAuthorID(Integer authorID) {
         this.authorID = authorID;
     }
 
-    public LocalDateTime getModificationDate() {
+    public String getModificationDate() {
         return modificationDate;
     }
 
-    public void setModificationDate(LocalDateTime modificationDate) {
+    public void setModificationDate(String modificationDate) {
         this.modificationDate = modificationDate;
     }
 
@@ -80,7 +81,7 @@ public class Document {
 
     @JsonIgnore
     public boolean isValid(){
-        return isValid(this.title) && isValid(this.text) && isValid(authorID);
+        return isValid(this.title) && isValid(this.text) && authorID != null;
     }
 
     private boolean isValid(String value){

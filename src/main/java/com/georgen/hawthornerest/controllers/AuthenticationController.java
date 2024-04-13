@@ -6,6 +6,9 @@ import com.georgen.hawthornerest.model.auth.RegistrationRequest;
 import com.georgen.hawthornerest.services.AuthenticationService;
 import com.georgen.hawthornerest.tools.Responder;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -15,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
 
     private AuthenticationService service;
@@ -25,6 +27,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
+    @Operation(
+            summary = "Register as a new user",
+            description = OpenApi.REGISTRATION_DESCRIPTION,
+            tags = {OpenApi.AUTH_TAG},
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "The result message and a token",
+                    content = @Content(schema = @Schema(implementation = AuthResponse.class))))
     public ResponseEntity register(@RequestBody RegistrationRequest request){
         try {
             AuthResponse response = service.register(request);
@@ -38,8 +48,12 @@ public class AuthenticationController {
     @PostMapping(value = "/login", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     @Operation(
             summary = "Login",
-            description = "Both parameters should be passed via x-www-form-urlencoded",
-            tags = {OpenApi.AUTH_TAG})
+            description = OpenApi.LOGIN_DESCRIPTION,
+            tags = {OpenApi.AUTH_TAG},
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "The result message and a token",
+                    content = @Content(schema = @Schema(implementation = AuthResponse.class))))
     public ResponseEntity login(
             @RequestParam(value = "login", defaultValue = "") String login,
             @RequestParam(value = "password", defaultValue = "") String password
@@ -54,6 +68,14 @@ public class AuthenticationController {
     }
 
     @GetMapping("/activate/{userID}")
+    @Operation(
+            summary = "Activate registered user",
+            description = OpenApi.ACTIVATION_DESCRIPTION,
+            tags = {OpenApi.AUTH_TAG},
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "The result message and a token",
+                    content = @Content(schema = @Schema(implementation = AuthResponse.class))))
     public ResponseEntity activate(@PathVariable(value = "userID") Integer userID){
         try {
             AuthResponse response = service.activate(userID);

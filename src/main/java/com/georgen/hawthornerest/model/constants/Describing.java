@@ -1,4 +1,4 @@
-package com.georgen.hawthornerest.model.messages;
+package com.georgen.hawthornerest.model.constants;
 
 public interface Describing {
     String getDescription();

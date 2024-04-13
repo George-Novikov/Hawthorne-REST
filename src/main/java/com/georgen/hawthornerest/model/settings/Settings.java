@@ -1,4 +1,4 @@
-package com.georgen.hawthornerest.model.system;
+package com.georgen.hawthornerest.model.settings;
 
 import com.georgen.hawthorne.api.annotations.SingletonEntity;
 

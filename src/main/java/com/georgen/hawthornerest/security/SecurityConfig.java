@@ -108,6 +108,9 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.POST, getGroupPath(USER))
                             .hasAuthority(Permission.USER_WRITE.getSubject())
 
+                            .requestMatchers(getGroupPath(USER, "/bulkActivation"))
+                            .hasAuthority(Permission.USER_WRITE.getSubject())
+
                             .requestMatchers(HttpMethod.DELETE, getGroupPath(USER))
                             .hasAuthority(Permission.USER_WRITE.getSubject())
 

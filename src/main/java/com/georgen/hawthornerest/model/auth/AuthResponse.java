@@ -1,7 +1,7 @@
 package com.georgen.hawthornerest.model.auth;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.georgen.hawthornerest.model.messages.Describing;
+import com.georgen.hawthornerest.model.constants.Describing;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class AuthResponse {

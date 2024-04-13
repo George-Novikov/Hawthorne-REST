@@ -1,6 +1,6 @@
 package com.georgen.hawthornerest.tools;
 
-import com.georgen.hawthornerest.model.messages.SystemMessage;
+import com.georgen.hawthornerest.model.constants.SystemMessage;
 import com.georgen.hawthornerest.model.users.Role;
 import com.georgen.hawthornerest.model.users.User;
 import com.georgen.hawthornerest.services.SettingsService;

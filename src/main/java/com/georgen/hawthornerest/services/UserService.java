@@ -2,24 +2,30 @@ package com.georgen.hawthornerest.services;
 
 import com.georgen.hawthorne.api.Repository;
 import com.georgen.hawthornerest.model.exceptions.UserException;
+import com.georgen.hawthornerest.model.users.ActivationResult;
 import com.georgen.hawthornerest.model.users.User;
 import com.georgen.hawthornerest.model.users.UserIndex;
 import com.georgen.hawthornerest.model.users.UsersToActivate;
 import com.georgen.hawthornerest.tools.UserIndexComparator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     private static final UserIndexComparator USER_INDEX_COMPARATOR = new UserIndexComparator();
+    /**
+     * Since Hawthorne entities currently have only one unique identifier field, marked as @Id,
+     * an index must be created so that he object can be found by any other custom unique field
+     */
     private List<UserIndex> userIndexes;
     private UsersToActivate activationList;
+    @Value("${admin-user.login}")
+    private String adminLogin;
 
     public User save(User user) throws Exception {
         ensureIndexesLoading();
@@ -67,22 +73,53 @@ public class UserService {
     }
 
     public List<User> list(int limit, int offset) throws Exception {
-        return Repository.list(User.class, limit, offset);
+        List<User> users = Repository.list(User.class, limit, offset);
+        users = users.stream().filter(user -> !adminLogin.equals(user.getLogin())).collect(Collectors.toList());
+        return users;
     }
 
     public boolean isLoginTaken(String login) throws Exception {
         return getByLogin(login) != null;
     }
 
-    public void activateList(UsersToActivate activationList){
+    public User activate(Integer id) throws Exception {
+        User user = get(id);
+        if (user == null) throw new UserException(String.format("User with id %d not found.", id));
 
+        user.setBlocked(false);
+        user.setExpired(false);
+
+        user = save(user);
+        removeFromActivationList(user);
+
+        return user;
+    }
+
+    public ActivationResult activateList(UsersToActivate activationList) throws Exception {
+        ActivationResult result = new ActivationResult();
+
+        for (Integer id : activationList.getUserIDs()){
+            User user = activate(id);
+            if (user != null){
+                result.addToActivated(id);
+            } else {
+                result.addToNotFound(id);
+            }
+        }
+
+        return result;
     }
 
     public UsersToActivate getActivationList() throws Exception {
         if (this.activationList == null){
             this.activationList = Repository.get(UsersToActivate.class);
-            if (this.activationList == null) this.activationList = new UsersToActivate();
         }
+
+        if (this.activationList == null){
+            this.activationList = new UsersToActivate();
+            Repository.save(activationList);
+        }
+
         return this.activationList;
     }
 
@@ -90,6 +127,13 @@ public class UserService {
         if (user == null || user.isNew() || !user.isBlocked()) return;
         this.activationList = getActivationList();
         this.activationList.add(user);
+        Repository.save(this.activationList);
+    }
+
+    public void removeFromActivationList(User user) throws Exception {
+        if (user == null || user.isNew()) return;
+        this.activationList = getActivationList();
+        this.activationList.remove(user);
         Repository.save(this.activationList);
     }
 

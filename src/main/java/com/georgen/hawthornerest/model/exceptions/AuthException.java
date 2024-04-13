@@ -1,6 +1,6 @@
 package com.georgen.hawthornerest.model.exceptions;
 
-import com.georgen.hawthornerest.model.messages.Describing;
+import com.georgen.hawthornerest.model.constants.Describing;
 
 public class AuthException extends Exception {
     public AuthException(){

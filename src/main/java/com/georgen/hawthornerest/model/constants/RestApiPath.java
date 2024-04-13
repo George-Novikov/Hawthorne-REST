@@ -23,6 +23,10 @@ public enum RestApiPath {
         return String.format("%s%s", basePath, "/*");
     }
 
+    public static String getGroupPath(RestApiPath group, String childPath){
+        return String.format("%s%s", getGroupPath(group), group.getPath());
+    }
+
     public static String getGroupPath(RestApiPath group){
         return String.format("%s%s", V1.getPath(), group.getPath());
     }
