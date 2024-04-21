@@ -1,6 +1,7 @@
 package com.georgen.hawthornerest.security;
 
 import com.georgen.hawthornerest.services.UserService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 @Configuration
 public class AuthenticationConfig {
@@ -50,5 +54,15 @@ public class AuthenticationConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean("authExceptionResolver")
+    public HandlerExceptionResolver handlerExceptionResolver(){
+        return (request, response, handler, ex) -> {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setView(new MappingJackson2JsonView());
+            modelAndView.addObject("exception", ex.getMessage());
+            return modelAndView;
+        };
     }
 }

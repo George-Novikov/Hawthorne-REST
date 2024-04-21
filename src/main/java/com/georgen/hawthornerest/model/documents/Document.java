@@ -19,7 +19,7 @@ public class Document {
     private String title;
     private String text;
     private Integer authorID;
-    private String modificationDate;
+    private LocalDateTime modificationDate;
     private List<String> attachedFileIDs = new ArrayList<>();
     private List<Role> ownerRoles = new ArrayList<>();
 
@@ -55,11 +55,11 @@ public class Document {
         this.authorID = authorID;
     }
 
-    public String getModificationDate() {
+    public LocalDateTime getModificationDate() {
         return modificationDate;
     }
 
-    public void setModificationDate(String modificationDate) {
+    public void setModificationDate(LocalDateTime modificationDate) {
         this.modificationDate = modificationDate;
     }
 

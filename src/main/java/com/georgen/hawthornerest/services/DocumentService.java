@@ -7,11 +7,13 @@ import com.georgen.hawthornerest.model.exceptions.InvalidEntityException;
 import com.georgen.hawthornerest.tools.Responder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class DocumentService {
     public Document save(Document document) throws HawthorneException, InvalidEntityException {
+        document.setModificationDate(LocalDateTime.now());
         return Repository.save(document);
     }
 
